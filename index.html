@@ -2,153 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Valentine Special</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Special for Joha</title>
 <style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-  text-align: center;
-}
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    text-align: center;
+  }
 
-h1 {
-  color: #fff;
-  font-size: 36px;
-  text-shadow: 2px 2px 5px #ff3366;
-  margin-bottom: 40px;
-}
+  h1 {
+    color: #fff;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 8px rgba(255, 51, 102, 0.6);
+    margin-bottom: 30px;
+  }
 
-button {
-  padding: 20px 40px;
-  font-size: 24px;
-  margin: 20px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-}
+  .buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s;
+  }
 
-#yes {
-  background: #ff3366;
-  color: white;
-}
+  button {
+    padding: 15px 30px;
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
 
-#no {
-  position: relative;
-  background: #fff;
-  color: #ff3366;
-}
+  #yes {
+    background: #ff3366;
+    color: white;
+    font-weight: bold;
+  }
 
-#message {
-  display: none;
-  color: #fff;
-  font-size: 22px;
-  margin-top: 30px;
-  line-height: 1.6;
-}
+  #no {
+    background: #fff;
+    color: #ff3366;
+    position: relative;
+    font-weight: bold;
+  }
 
-.heart, .care {
-  position: absolute;
-  font-size: 20px;
-  animation: float 6s linear infinite;
-}
+  #message {
+    display: none;
+    color: #fff;
+    font-size: 1.6rem;
+    margin-top: 30px;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    max-width: 90%;
+    line-height: 1.6;
+  }
 
-@keyframes float {
-  from { transform: translateY(100vh); opacity:1;}
-  to { transform: translateY(-10vh); opacity:0;}
-}
+  #angryCat {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    opacity: 0.7;
+    z-index: 100;
+  }
 
-#funCat {
-  display:none;
-  position: absolute;
-  width: 200px;
-  bottom: 50px;
-  right: 50px;
-  animation: floatCat 2s ease-in-out infinite alternate;
-}
+  .floating-emoji {
+    position: absolute;
+    bottom: -10%;
+    pointer-events: none;
+    animation: floatUp 6s linear forwards;
+  }
 
-@keyframes floatCat {
-  0% { transform: translateY(0) rotate(0deg);}
-  50% { transform: translateY(-20px) rotate(-5deg);}
-  100% { transform: translateY(0) rotate(5deg);}
-}
+  @keyframes floatUp {
+    to { transform: translateY(-120vh) rotate(360deg); opacity: 0;}
+  }
 </style>
 </head>
 <body>
 
-<h1>Joha, will you be my Valentine? ❤️</h1>
+<img id="angryCat" src="1000267696.jpg" alt="Angry Cat">
 
-<div>
-<button id="yes" onclick="showLove()">Yes</button>
-<button id="no" onmouseover="moveNo()" onclick="noClick()">No</button>
+<div class="container">
+  <h1 id="mainTitle">Joha, will you be my Valentine? ❤️</h1>
+
+  <div class="buttons" id="btnContainer">
+    <button id="yes" onclick="showLove()">Yes</button>
+    <button id="no" onmouseover="moveNo()" onclick="noClick()">No</button>
+  </div>
+
+  <div id="message"></div>
 </div>
 
-<div id="message">
-My beloved,<br>
-You are always in my heart.<br>
-I am always ready to be by your side.<br>
-I know that everything will be even more beautiful if we are together.<br>
-Happy Valentine’s Day & 💚 from Tausif.
-</div>
-
-<img id="funCat" src="https://i.imgur.com/4AiXzf8.png" alt="Funny Cat" style="display:none;">
-
-<!-- HAlka Romantic Music -->
 <audio id="music" loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 let noCounter = 0;
+let yesScaleSize = 1;
 
 function moveNo() {
-  const x = Math.random() * (window.innerWidth - 120);
-  const y = Math.random() * (window.innerHeight - 60);
-  const noBtn = document.getElementById("no");
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+  if (noCounter < 4) {
+    const x = Math.random() * (window.innerWidth - 150);
+    const y = Math.random() * (window.innerHeight - 100);
+    const noBtn = document.getElementById("no");
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
 }
 
 function noClick() {
   noCounter++;
-  if(noCounter >= 4){
-    document.getElementById("funCat").style.display = "block";
+  if (noCounter < 4) {
+    yesScaleSize += 0.3;
+    document.getElementById("yes").style.transform = `scale(${yesScaleSize})`;
+    moveNo();
+  } 
+  else if (noCounter === 4) {
+    const angryCat = document.getElementById("angryCat");
+    const btnContainer = document.getElementById("btnContainer");
+    const yesBtn = document.getElementById("yes");
+
+    angryCat.style.display = "block";
+    btnContainer.style.opacity = "0";
+
+    setTimeout(() => {
+      angryCat.style.display = "none";
+      btnContainer.style.opacity = "1";
+      yesScaleSize = 3.5; // ২-৩ সেকেন্ড পর Yes বাটনটি অনেক বড় হয়ে আসবে
+      yesBtn.style.transform = `scale(${yesScaleSize})`;
+    }, 2500);
+  } else {
+    moveNo();
   }
 }
 
 function showLove() {
-  document.getElementById("message").style.display = "block";
-  document.getElementById("music").play();
-  startHearts();
-  startCare();
+  document.getElementById("mainTitle").style.display = "none";
+  document.getElementById("btnContainer").style.display = "none";
+  
+  const messageDiv = document.getElementById("message");
+  messageDiv.style.display = "block";
+
+  const audio = document.getElementById("music");
+  audio.volume = 0.5; // হালকা সাউন্ড
+  audio.play().catch(e => console.log("Music interaction required"));
+
+  const text = "My dearest Joha, \n\nYou finally said Yes! 💖\nYou are always in my heart.\nEverything is beautiful when we are together.\n\nHappy Valentine’s Day! 💚💛💖\n- Tausif";
+  let i = 0;
+  function typeWriter() {
+    if (i < text.length) {
+      messageDiv.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+      i++;
+      setTimeout(typeWriter, 50);
+    } else {
+      startFloatingEmojis();
+    }
+  }
+  typeWriter();
 }
 
-function startHearts() {
-  setInterval(()=>{
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random()*100 + "vw";
-    heart.style.fontSize = Math.random()*30 + 15 + "px";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(), 6000);
-  }, 200);
-}
-
-function startCare() {
-  setInterval(()=>{
-    const care = document.createElement("div");
-    care.className = "care";
-    care.innerHTML = "💚💛💖💕💞";
-    care.style.left = Math.random()*100 + "vw";
-    care.style.fontSize = Math.random()*25 + 15 + "px";
-    document.body.appendChild(care);
-    setTimeout(()=>care.remove(), 6000);
+function startFloatingEmojis() {
+  setInterval(() => {
+    const emojis = ["❤️", "💖", "💚", "💕", "💞"];
+    const el = document.createElement("div");
+    el.className = "floating-emoji";
+    el.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = Math.random() * 95 + "vw";
+    el.style.fontSize = (Math.random() * 20 + 20) + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
   }, 300);
 }
 </script>
