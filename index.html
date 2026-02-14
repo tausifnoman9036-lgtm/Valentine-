@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Special</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+  text-align: center;
+}
+
+h1 {
+  color: #fff;
+  font-size: 36px;
+  text-shadow: 2px 2px 5px #ff3366;
+  margin-bottom: 40px;
+}
+
+button {
+  padding: 20px 40px;
+  font-size: 24px;
+  margin: 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+#yes {
+  background: #ff3366;
+  color: white;
+}
+
+#no {
+  position: relative;
+  background: #fff;
+  color: #ff3366;
+}
+
+#message {
+  display: none;
+  color: #fff;
+  font-size: 22px;
+  margin-top: 30px;
+  line-height: 1.6;
+}
+
+.heart, .care {
+  position: absolute;
+  font-size: 20px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); opacity:1;}
+  to { transform: translateY(-10vh); opacity:0;}
+}
+
+#funCat {
+  display:none;
+  position: absolute;
+  width: 200px;
+  bottom: 50px;
+  right: 50px;
+  animation: floatCat 2s ease-in-out infinite alternate;
+}
+
+@keyframes floatCat {
+  0% { transform: translateY(0) rotate(0deg);}
+  50% { transform: translateY(-20px) rotate(-5deg);}
+  100% { transform: translateY(0) rotate(5deg);}
+}
+</style>
+</head>
+<body>
+
+<h1>Joha, will you be my Valentine? ❤️</h1>
+
+<div>
+<button id="yes" onclick="showLove()">Yes</button>
+<button id="no" onmouseover="moveNo()" onclick="noClick()">No</button>
+</div>
+
+<div id="message">
+My beloved,<br>
+You are always in my heart.<br>
+I am always ready to be by your side.<br>
+I know that everything will be even more beautiful if we are together.<br>
+Happy Valentine’s Day & 💚 from Tausif.
+</div>
+
+<img id="funCat" src="https://i.imgur.com/4AiXzf8.png" alt="Funny Cat">
+
+<audio id="music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let noCounter = 0;
+
+function moveNo() {
+  const x = Math.random() * (window.innerWidth - 120);
+  const y = Math.random() * (window.innerHeight - 60);
+  const noBtn = document.getElementById("no");
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+function noClick() {
+  noCounter++;
+  if(noCounter >= 4){
+    document.getElementById("funCat").style.display = "block";
+  }
+}
+
+function showLove() {
+  document.getElementById("message").style.display = "block";
+  document.getElementById("music").play();
+  startHearts();
+  startCare();
+}
+
+function startHearts() {
+  setInterval(()=>{
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.fontSize = Math.random()*30 + 15 + "px";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(), 6000);
+  }, 200);
+}
+
+function startCare() {
+  setInterval(()=>{
+    const care = document.createElement("div");
+    care.className = "care";
+    care.innerHTML = "💚💛💖💕💞";
+    care.style.left = Math.random()*100 + "vw";
+    care.style.fontSize = Math.random()*25 + 15 + "px";
+    document.body.appendChild(care);
+    setTimeout(()=>care.remove(), 6000);
+  }, 300);
+}
+</script>
+
+</body>
+</html>
