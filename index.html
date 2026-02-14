@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Valentine Special for Joha</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+  }
+
+  #main-container { z-index: 10; width: 100%; }
+
+  h1 {
+    color: #fff;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 10px rgba(255, 51, 102, 0.4);
+    margin-bottom: 30px;
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    min-height: 150px;
+    position: relative;
+  }
+
+  button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+  }
+
+  #yes { background: #ff3366; color: white; z-index: 1000; }
+  #no { background: #fff; color: #ff3366; position: relative; }
+
+  /* অস্ত্র তাক করা বিড়ালের ছবি */
+  #angryCatImg {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    z-index: 2000;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  /* মেসেজ বক্স */
+  #message-box {
+    display: none;
+    color: #fff;
+    font-size: 1.4rem;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    line-height: 1.6;
+    max-width: 90%;
+    margin: 0 auto;
+    white-space: pre-wrap; /* লাইন ব্রেক ঠিক রাখার জন্য */
+  }
+
+  /* হার্ট ও রঙিন কাগজ অ্যানিমেশন */
+  .confetti {
+    position: absolute;
+    bottom: -50px;
+    pointer-events: none;
+    animation: floatUp 5s linear forwards;
+    z-index: 5;
+  }
+
+  @keyframes floatUp {
+    to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<img id="angryCatImg" src="https://media.tenor.com/7S8V9S_e-EAAAAAC/cat-gun.gif" alt="Angry Cat">
+
+<div id="main-container">
+  <h1 id="title">Joha, will you be my Valentine? ❤️</h1>
+  <div class="btn-group" id="btn-group">
+    <button id="yes" onclick="showLove()">Yes</button>
+    <button id="no" onmouseover="handleNo()" onclick="handleNo()">No</button>
+  </div>
+</div>
+
+<div id="message-box"></div>
+
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let noCount = 0;
+let yesScale = 1;
+
+function handleNo() {
+  noCount++;
+  const yesBtn = document.getElementById('yes');
+  const noBtn = document.getElementById('no');
+  const angryCat = document.getElementById('angryCatImg');
+  const btnGroup = document.getElementById('btn-group');
+
+  if (noCount < 4) {
+    // Yes বাটন বড় হবে
+    yesScale += 0.4;
+    yesBtn.style.transform = `scale(${yesScale})`;
+    
+    // No বাটন সরবে
+    const x = Math.random() * (window.innerWidth - 120);
+    const y = Math.random() * (window.innerHeight - 100);
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = Math.max(20, x) + 'px';
+    noBtn.style.top = Math.max(20, y) + 'px';
+  } 
+  else if (noCount === 4) {
+    // ৪ নম্বর বারে বিড়ালের ছবি আসবে
+    btnGroup.style.visibility = 'hidden';
+    angryCat.style.display = 'block';
+
+    setTimeout(() => {
+      angryCat.style.display = 'none';
+      btnGroup.style.visibility = 'visible';
+      
+      // No বাটন ডিলিট করে Yes বাটন বিশাল হবে
+      noBtn.style.display = 'none';
+      yesScale = 5; 
+      yesBtn.style.position = 'fixed';
+      yesBtn.style.top = '50%';
+      yesBtn.style.left = '50%';
+      yesBtn.style.transform = 'translate(-50%, -50%) scale(' + yesScale + ')';
+    }, 3000); // ৩ সেকেন্ড থাকবে
+  }
+}
+
+function showLove() {
+  // ১. মেইন স্ক্রিন হাইড করা
+  document.getElementById('main-container').style.display = 'none';
+  const msgBox = document.getElementById('message-box');
+  msgBox.style.display = 'block';
+
+  // ২. মিউজিক প্লে করা
+  const audio = document.getElementById('music');
+  audio.volume = 0.5;
+  audio.play().catch(e => console.log("Music error"));
+
+  // ৩. অভিনন্দন হিসেবে রঙিন কাগজ ও হার্ট ওড়ানো শুরু করা
+  setInterval(createConfetti, 250);
+
+  // ৪. টাইপিং মেসেজ
+  const messageText = "My beloved,\nYou are always in my heart.\nI am always ready to be by your side.\nI know that everything will be even more beautiful if we are together.\nHappy Valentine’s Day ❤️";
+  
+  let charIndex = 0;
+  msgBox.innerHTML = ""; // আগের লেখা পরিষ্কার
+
+  function typeWriter() {
+    if (charIndex < messageText.length) {
+      const char = messageText.charAt(charIndex);
+      msgBox.innerHTML += char === '\n' ? '<br>' : char;
+      charIndex++;
+      setTimeout(typeWriter, 60); // টাইপিং স্পিড
+    }
+  }
+  
+  typeWriter();
+}
+
+function createConfetti() {
+  const emojis = ["❤️", "💖", "💕", "🎊", "✨", "🎉", "💙", "💞", "🫂"];
+  const c = document.createElement("div");
+  c.className = "confetti";
+  c.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+  c.style.left = Math.random() * 95 + "vw";
+  c.style.fontSize = (Math.random() * 25 + 20) + "px";
+  document.body.appendChild(c);
+  
+  // ৫ সেকেন্ড পর রিমুভ হবে
+  setTimeout(() => c.remove(), 5000);
+}
+</script>
+
+</body>
+</html>
