@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Valentine Special for Joha</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to bottom, #ff9a9e, #fad0c4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+  }
+
+  #main-content { z-index: 10; width: 100%; }
+
+  h1 {
+    color: #fff;
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 10px rgba(255, 51, 102, 0.4);
+    margin-bottom: 30px;
+  }
+
+  .btn-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    min-height: 150px;
+    position: relative;
+  }
+
+  button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+  }
+
+  #yes { background: #ff3366; color: white; z-index: 1000; }
+  #no { background: #fff; color: #ff3366; position: relative; }
+
+  /* রাগী বিড়াল ইমোজি */
+  #angry-emoji {
+    display: none;
+    font-size: 80px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+  }
+
+  #message-box {
+    display: none;
+    color: #fff;
+    font-size: 1.3rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    line-height: 1.6;
+    max-width: 90%;
+    margin: 0 auto;
+    animation: fadeIn 0.8s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+  .floating-confetti {
+    position: absolute;
+    bottom: -50px;
+    pointer-events: none;
+    animation: floatUp 5s linear forwards;
+    z-index: 5;
+  }
+
+  @keyframes floatUp {
+    to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="angry-emoji">🔫🐱</div>
+
+<div id="main-content">
+  <h1 id="title">Joha, will you be my Valentine? ❤️</h1>
+  <div class="btn-group" id="btn-container">
+    <button id="yes" onclick="showLove()">Yes</button>
+    <button id="no" onmouseover="handleNo()" onclick="handleNo()">No</button>
+  </div>
+</div>
+
+<div id="message-box"></div>
+
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let noCount = 0;
+let yesScale = 1;
+
+function handleNo() {
+  noCount++;
+  const yesBtn = document.getElementById('yes');
+  const noBtn = document.getElementById('no');
+  const angryEmoji = document.getElementById('angry-emoji');
+  const btnContainer = document.getElementById('btn-container');
+
+  if (noCount < 4) {
+    // ১, ২, ৩ নম্বর বার: Yes বাটন বড় হবে
+    yesScale += 0.4;
+    yesBtn.style.transform = `scale(${yesScale})`;
+    
+    // No বাটন সরবে
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 100);
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = Math.max(20, x) + 'px';
+    noBtn.style.top = Math.max(20, y) + 'px';
+  } 
+  else if (noCount === 4) {
+    // ৪ নম্বর বার: রাগী বিড়ালের ইমোজি প্র্যাঙ্ক
+    btnContainer.style.visibility = 'hidden';
+    angryEmoji.style.display = 'block';
+
+    setTimeout(() => {
+      angryEmoji.style.display = 'none';
+      btnContainer.style.visibility = 'visible';
+      
+      // No বাটন সরিয়ে Yes বিশাল করা
+      noBtn.style.display = 'none';
+      yesScale = 5; 
+      yesBtn.style.position = 'fixed';
+      yesBtn.style.top = '50%';
+      yesBtn.style.left = '50%';
+      yesBtn.style.transform = 'translate(-50%, -50%) scale(' + yesScale + ')';
+    }, 2500);
+  }
+}
+
+function showLove() {
+  // মেইন পেজ কন্টেন্ট সরিয়ে মেসেজ দেখানো
+  document.getElementById('main-content').style.display = 'none';
+  const msgBox = document.getElementById('message-box');
+  msgBox.style.display = 'block';
+
+  // মিউজিক প্লে
+  const audio = document.getElementById('music');
+  audio.volume = 0.5;
+  audio.play().catch(() => {});
+
+  const text = "My dearest Joha,\n\nYou finally said Yes! 💖\nYou are always in my heart.\nEverything is beautiful when we are together.\n\nHappy Valentine’s Day! 💚💛💖\n- Tausif";
+  
+  let i = 0;
+  msgBox.innerHTML = "";
+  function typeWriter() {
+    if (i < text.length) {
+      msgBox.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+      i++;
+      setTimeout(typeWriter, 50);
+    } else {
+      // মেসেজ টাইপিং শেষে রঙিন কনফেটি/ইমোজি শুরু হবে
+      setInterval(createConfetti, 300);
+    }
+  }
+  typeWriter();
+}
+
+function createConfetti() {
+  const emojis = ["❤️", "💖", "🎉", "✨", "💕", "💞", "🎊", "💚"];
+  const c = document.createElement("div");
+  c.className = "floating-confetti";
+  c.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+  c.style.left = Math.random() * 95 + "vw";
+  c.style.fontSize = (Math.random() * 20 + 25) + "px";
+  document.body.appendChild(c);
+  
+  // ৫ সেকেন্ড পর ইমোজি ডিলিট করে দেওয়া (ফোনের মেমোরি বাঁচানোর জন্য)
+  setTimeout(() => c.remove(), 5000);
+}
+</script>
+
+</body>
+</html>
